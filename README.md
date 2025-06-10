@@ -4,7 +4,7 @@ Apple's Liquid Glass effect for React.
 
 Card Example              |  Button Example
 :-------------------------:|:-------------------------:
-![](/assets/card.png)  |  ![](/assets/button.png)
+![](https://github.com/rdev/liquid-glass-react/raw/master/assets/card.png)  |  ![](https://github.com/rdev/liquid-glass-react/raw/master/assets/button.png)
 
 ## Video
 
@@ -75,7 +75,7 @@ When you want the glass effect to respond to mouse movement over a larger area (
 ```tsx
 function App() {
   const containerRef = useRef<HTMLDivElement>(null)
-  
+
   return (
     <div ref={containerRef} className="w-full h-screen bg-image">
       <LiquidGlass

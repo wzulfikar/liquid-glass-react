@@ -4,7 +4,7 @@
     "": {
       "name": "liquid-glass-example",
       "dependencies": {
-        "liquid-glass-react": "^0.0.2",
+        "liquid-glass-react": "latest",
         "lucide-react": "^0.514.0",
         "next": "15.3.3",
         "react": "^19.0.0",
@@ -189,7 +189,7 @@
 
     "lightningcss-win32-x64-msvc": ["lightningcss-win32-x64-msvc@1.30.1", "", { "os": "win32", "cpu": "x64" }, "sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg=="],
 
-    "liquid-glass-react": ["liquid-glass-react@0.0.2", "", { "peerDependencies": { "react": ">=19", "react-dom": ">=19" } }, "sha512-ngWXymf38e/V/fnQS9V8SkRdgAT3XfEL8qiONVJKBgpy0STKAPimrFA3K/34x3+ZJ6G/s/atlwG4WwrLGfERPw=="],
+    "liquid-glass-react": ["liquid-glass-react@1.0.0", "", { "peerDependencies": { "react": ">=19", "react-dom": ">=19" } }, "sha512-2IKXBoYJAkKZIINSIdRxHbita9BCPooSKlNzEZrs9uSw0retWovYeTl3fqKtXYvOQo0Myza4NL4DoRC28uJGtQ=="],
 
     "lucide-react": ["lucide-react@0.514.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-HXD0OAMd+JM2xCjlwG1EGW9Nuab64dhjO3+MvdyD+pSUeOTBaVAPhQblKIYmmX4RyBYbdzW0VWnJpjJmxWGr6w=="],
 

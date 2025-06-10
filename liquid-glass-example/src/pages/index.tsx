@@ -1,7 +1,7 @@
 import { Geist } from "next/font/google"
 import { useState, useRef, useCallback } from "react"
 import LiquidGlass from "liquid-glass-react"
-import { LogOutIcon } from "lucide-react"
+import { LogOutIcon, Github } from "lucide-react"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -123,7 +123,18 @@ export default function Home() {
       {/* Right Panel - Control Panel */}
       <div className="col-start-3 bg-gray-900/80 h-full overflow-y-auto backdrop-blur-md border-l border-white/10 p-8 flex flex-col">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-2">Glassy Boi but Web</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-white">Glassy Boi but Web</h2>
+            <a
+              href="https://github.com/rdev/liquid-glass-react"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
+              title="View on GitHub"
+            >
+              <Github className="w-6 h-6" />
+            </a>
+          </div>
           <p className="text-white/60 text-sm">Liquid Glass container effect for React. With settings and effects and stuff.</p>
         </div>
 

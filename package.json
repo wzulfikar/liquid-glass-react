@@ -1,7 +1,7 @@
 {
   "name": "liquid-glass-react",
-  "version": "0.0.2",
-  "description": "A React component library built with esbuild",
+  "version": "1.0.0",
+  "description": "Apple's Liquid Glass effect for React",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
