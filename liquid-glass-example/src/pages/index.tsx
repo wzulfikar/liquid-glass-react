@@ -29,6 +29,7 @@ export default function Home() {
 
   // Shared state
   const [activeTab, setActiveTab] = useState<'userInfo' | 'logOut'>('userInfo')
+  const [crackIntensity, setCrackIntensity] = useState(0.5)
   const containerRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -55,6 +56,7 @@ export default function Home() {
             cornerRadius={cornerRadius}
             mouseContainer={containerRef}
             overLight={userInfoOverLight}
+            cracks={crackIntensity}
             style={{
               position: "fixed",
               top: "25%",
@@ -101,6 +103,7 @@ export default function Home() {
             mouseContainer={containerRef}
             overLight={logoutOverLight}
             padding="8px 16px"
+            cracks={crackIntensity}
             onClick={() => {
               console.log("Logged out");
             }}
@@ -217,6 +220,15 @@ export default function Home() {
                 </div>
                 <input type="range" min="0" max="100" step="1" value={cornerRadius} onChange={(e) => setCornerRadius(Number(e.target.value))} className="w-full" />
                 <p className="text-xs text-white/50 mt-2">Controls the roundness of the glass corners</p>
+              </div>
+              
+              <div>
+                <span className="block text-sm font-semibold text-white/90 mb-3">Cracks Intensity</span>
+                <div className="mb-2">
+                  <span className="text-xl font-mono text-pink-300">{crackIntensity}</span>
+                </div>
+                <input type="range" min="0" max="1" step="0.05" value={crackIntensity} onChange={(e) => setCrackIntensity(Number(e.target.value))} className="w-full" />
+                <p className="text-xs text-white/50 mt-2">Controls the cracks in the glass</p>
               </div>
 
               <div>

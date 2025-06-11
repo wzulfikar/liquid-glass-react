@@ -1,6 +1,129 @@
 import { useId, useState, useRef, useCallback, useEffect, forwardRef } from "react"
 import { displacementMap } from "./utils"
 
+/* ---------- Crack Pattern Generator ---------- */
+const CrackPattern: React.FC<{ id: string; intensity: number; width: number; height: number }> = ({ id, intensity, width, height }) => {
+  // Generate deterministic random cracks based on intensity
+  const generateCracks = (intensity: number) => {
+    const cracks: Array<{id: string, path: string}> = []
+    const numCracks = Math.floor(intensity * 8) // 0-8 main cracks
+    const seed = 12345 // Fixed seed for consistency
+    
+    // Simple seeded random function
+    let randomSeed = seed
+    const seededRandom = () => {
+      randomSeed = (randomSeed * 9301 + 49297) % 233280
+      return randomSeed / 233280
+    }
+
+    for (let i = 0; i < numCracks; i++) {
+      const startX = seededRandom() * width
+      const startY = seededRandom() * height
+      const length = 20 + seededRandom() * (width * 0.3)
+      const angle = seededRandom() * Math.PI * 2
+      const segments = 3 + Math.floor(seededRandom() * 4)
+      
+      let path = `M ${startX} ${startY}`
+      let currentX = startX
+      let currentY = startY
+      
+      for (let j = 0; j < segments; j++) {
+        const segmentLength = length / segments
+        const angleVariation = (seededRandom() - 0.5) * 0.5
+        const currentAngle = angle + angleVariation
+        
+        currentX += Math.cos(currentAngle) * segmentLength
+        currentY += Math.sin(currentAngle) * segmentLength
+        
+        if (j === 0) {
+          path += ` L ${currentX} ${currentY}`
+        } else {
+          // Add some curve variation
+          const controlX = currentX + (seededRandom() - 0.5) * 10
+          const controlY = currentY + (seededRandom() - 0.5) * 10
+          path += ` Q ${controlX} ${controlY} ${currentX} ${currentY}`
+        }
+      }
+      
+      cracks.push({
+        id: `${id}-crack-${i}`,
+        path
+      })
+      
+      // Add smaller branch cracks
+      if (seededRandom() > 0.6) {
+        const branchX = startX + (currentX - startX) * seededRandom()
+        const branchY = startY + (currentY - startY) * seededRandom()
+        const branchLength = length * 0.3
+        const branchAngle = angle + (seededRandom() - 0.5) * Math.PI
+        const branchEndX = branchX + Math.cos(branchAngle) * branchLength
+        const branchEndY = branchY + Math.sin(branchAngle) * branchLength
+        
+        cracks.push({
+          id: `${id}-branch-${i}`,
+          path: `M ${branchX} ${branchY} L ${branchEndX} ${branchEndY}`
+        })
+      }
+    }
+    
+    return cracks
+  }
+
+  const cracks = generateCracks(intensity)
+  
+  if (intensity === 0) return null
+
+  return (
+    <svg 
+      style={{ position: "absolute", width, height, pointerEvents: "none" }} 
+      aria-hidden="true"
+    >
+      <defs>
+        <filter id={`${id}-crack-filter`} x="0%" y="0%" width="100%" height="100%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+          <feColorMatrix 
+            in="blurred"
+            type="matrix"
+            values="0 0 0 0 1
+                   0 0 0 0 1  
+                   0 0 0 0 1
+                   0 0 0 1 0"
+            result="white"
+          />
+          <feComposite in="white" in2="SourceGraphic" operator="over" />
+        </filter>
+      </defs>
+      {cracks.map((crack) => (
+        <path
+          key={crack.id}
+          d={crack.path}
+          stroke="rgba(255, 255, 255, 0.8)"
+          strokeWidth={0.5 + intensity * 0.5}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          filter={`url(#${id}-crack-filter)`}
+          opacity={intensity * 0.7}
+        />
+      ))}
+      {/* Add shadow paths for depth */}
+      {cracks.map((crack) => (
+        <path
+          key={`shadow-${crack.id}`}
+          d={crack.path}
+          stroke="rgba(0, 0, 0, 0.3)"
+          strokeWidth={0.8 + intensity * 0.7}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity={intensity * 0.4}
+          transform="translate(1, 1)"
+        />
+      ))}
+    </svg>
+  )
+}
+
 /* ---------- SVG filter (edge-only displacement) ---------- */
 const GlassFilter: React.FC<{ id: string; displacementScale: number; aberrationIntensity: number; width: number; height: number }> = ({ id, displacementScale, aberrationIntensity, width, height }) => (
   <svg style={{ position: "absolute", width, height }} aria-hidden="true">
@@ -104,6 +227,7 @@ const GlassContainer = forwardRef<
     onMouseEnter?: () => void
     onMouseDown?: () => void
     onMouseUp?: () => void
+    onKeyDown?: (e: React.KeyboardEvent) => void
     active?: boolean
     overLight?: boolean
     cornerRadius?: number
@@ -125,6 +249,7 @@ const GlassContainer = forwardRef<
       onMouseLeave,
       onMouseDown,
       onMouseUp,
+      onKeyDown,
       active = false,
       overLight = false,
       cornerRadius = 999,
@@ -141,8 +266,24 @@ const GlassContainer = forwardRef<
       backdropFilter: `blur(${(overLight ? 20 : 4) + blurAmount * 32}px) saturate(${saturation}%)`,
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if ((e.key === 'Enter' || e.key === ' ') && onClick) {
+        e.preventDefault()
+        onClick()
+      }
+      onKeyDown?.(e)
+    }
+
     return (
-      <div ref={ref} className={`relative ${className} ${active ? "active" : ""} ${Boolean(onClick) ? "cursor-pointer" : ""}`} style={style} onClick={onClick}>
+      <div 
+        ref={ref} 
+        className={`relative ${className} ${active ? "active" : ""} ${onClick ? "cursor-pointer" : ""}`} 
+        style={style} 
+        onClick={onClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onClick ? 0 : undefined}
+        role={onClick ? "button" : undefined}
+      >
         <GlassFilter id={filterId} displacementScale={displacementScale} aberrationIntensity={aberrationIntensity} width={glassSize.width} height={glassSize.height} />
 
         <div
@@ -209,6 +350,7 @@ interface LiquidGlassProps {
   style?: React.CSSProperties
   overLight?: boolean
   onClick?: () => void
+  cracks?: number
 }
 
 export default function LiquidGlass({
@@ -227,6 +369,7 @@ export default function LiquidGlass({
   overLight = false,
   style = {},
   onClick,
+  cracks = 0,
 }: LiquidGlassProps) {
   const glassRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
@@ -234,6 +377,9 @@ export default function LiquidGlass({
   const [glassSize, setGlassSize] = useState({ width: 270, height: 69 })
   const [internalGlobalMousePos, setInternalGlobalMousePos] = useState({ x: 0, y: 0 })
   const [internalMouseOffset, setInternalMouseOffset] = useState({ x: 0, y: 0 })
+
+  const crackId = useId()
+  console.log('crackId:', crackId);
 
   // Use external mouse position if provided, otherwise use internal
   const globalMousePos = externalGlobalMousePos || internalGlobalMousePos
@@ -379,7 +525,7 @@ export default function LiquidGlass({
     return () => window.removeEventListener("resize", updateGlassSize)
   }, [])
 
-  const transformStyle = `translate(calc(-50% + ${calculateElasticTranslation().x}px), calc(-50% + ${calculateElasticTranslation().y}px)) ${(isActive && Boolean(onClick)) ? "scale(0.96)" : calculateDirectionalScale()}`
+  const transformStyle = `translate(calc(-50% + ${calculateElasticTranslation().x}px), calc(-50% + ${calculateElasticTranslation().y}px)) ${(isActive && onClick) ? "scale(0.96)" : calculateDirectionalScale()}`
 
   const baseStyle = {
     ...style,
@@ -442,6 +588,30 @@ export default function LiquidGlass({
         {children}
       </GlassContainer>
 
+      {/* Crack overlay */}
+      {cracks > 0 && (
+        <div
+          style={{
+            ...positionStyles,
+            height: glassSize.height,
+            width: glassSize.width,
+            borderRadius: `${cornerRadius}px`,
+            transform: baseStyle.transform,
+            transition: baseStyle.transition,
+            pointerEvents: "none",
+            overflow: "hidden",
+            mixBlendMode: "overlay",
+          }}
+        >
+          <CrackPattern 
+            id={crackId}
+            intensity={Math.min(1, Math.max(0, cracks))}
+            width={glassSize.width}
+            height={glassSize.height}
+          />
+        </div>
+      )}
+
       {/* Border layer 1 - extracted from glass container */}
       <span
         style={{
@@ -496,7 +666,7 @@ export default function LiquidGlass({
       />
 
       {/* Hover effects */}
-      {Boolean(onClick) && (
+      {onClick && (
         <>
           <div
             style={{
