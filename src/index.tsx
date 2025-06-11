@@ -379,7 +379,6 @@ export default function LiquidGlass({
   const [internalMouseOffset, setInternalMouseOffset] = useState({ x: 0, y: 0 })
 
   const crackId = useId()
-  console.log('crackId:', crackId);
 
   // Use external mouse position if provided, otherwise use internal
   const globalMousePos = externalGlobalMousePos || internalGlobalMousePos

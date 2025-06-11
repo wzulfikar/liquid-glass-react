@@ -37,13 +37,13 @@ export default function Home() {
       {/* Left Panel - Glass Effect Demo */}
       <div className="flex-1 relative overflow-auto col-span-2" ref={containerRef}>
         <div className="w-full min-h-[200vh] absolute top-0 left-0 pb-96 mb-96">
-          <img src="https://picsum.photos/2000/2000" className="w-full h-96 object-cover" />
+          <img src="img-1.jpg" className="w-full h-96 object-cover" />
           <h2 className="text-2xl font-semibold my-5 text-center">Some Heading</h2>
           <p className="px-10">Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger</p>
 
-          <img src="https://picsum.photos/1200/1200" className="w-full h-80 object-cover my-10" />
-          <img src="https://picsum.photos/1400/1300" className="w-full h-72 object-cover my-10" />
-          <img src="https://picsum.photos/1100/1200" className="w-full h-96 object-cover my-10 mb-96" />
+          <img src="img-2.jpg" className="w-full h-80 object-cover my-10" />
+          <img src="img-3.jpg" className="w-full h-72 object-cover my-10" />
+          <img src="img-4.jpg" className="w-full h-96 object-cover my-10 mb-96" />
         </div>
 
         {activeTab === 'userInfo' && (
