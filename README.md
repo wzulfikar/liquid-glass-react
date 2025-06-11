@@ -109,5 +109,6 @@ function App() {
 | `padding` | `string` | - | CSS padding value |
 | `style` | `React.CSSProperties` | - | Additional inline styles |
 | `overLight` | `boolean` | `false` | Whether the glass is over a light background |
+| `cracks` | `number` | `0` | Controls the cracks intensity (0 = no cracks, 1 = most cracks) |
 | `onClick` | `() => void` | - | Click handler |
 | `mouseContainer` | `React.RefObject<HTMLElement \| null> \| null` | `null` | Container element to track mouse movement on (defaults to the glass component itself) |
