@@ -1,7 +1,7 @@
 {
-  "name": "liquid-glass-react",
+  "name": "liquid-glass-cracked-react",
   "version": "1.0.0",
-  "description": "Apple's Liquid Glass effect for React",
+  "description": "Apple's Liquid Glass effect for React with cracks",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "liquid-glass-cracked-react": "^1.0.0",
     "liquid-glass-react": "latest",
     "lucide-react": "^0.514.0",
     "next": "15.3.3",

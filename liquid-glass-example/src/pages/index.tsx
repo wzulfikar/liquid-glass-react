@@ -1,6 +1,6 @@
 import { Geist } from "next/font/google"
 import { useState, useRef, useCallback } from "react"
-import LiquidGlass from "liquid-glass-react"
+import LiquidGlass from "liquid-glass-cracked-react"
 import { LogOutIcon, Github } from "lucide-react"
 
 const geistSans = Geist({
